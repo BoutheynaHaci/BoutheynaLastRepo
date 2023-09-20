@@ -23,11 +23,9 @@ my-job:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-oidc-issuer-url: ${{ secrets.AWS_OIDC_ISSUER_URL }}
-          aws-oidc-client-id: ${{ secrets.AWS_OIDC_CLIENT_ID }}
+          role-to-assume: arn:aws:iam::381163360185:role/boutheyna_github_actions_role 
+          role-session-name: Bouth_Session_Github_Actions
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Validate OIDC provider configuration
-        run: |
-          echo "Issuer URL: ${{ secrets.AWS_OIDC_ISSUER_URL }}"
-          echo "Client ID: ${{ secrets.AWS_OIDC_CLIENT_ID }}"
+      
   
