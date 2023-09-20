@@ -1,0 +1,47 @@
+name: "Connect to an AWS role from a GitHub repository"
+
+on:
+  push:
+    branches-ignore:
+      - '*'
+  pull_request:
+    branches-ignore:
+      - '*'
+
+env:
+  
+  AWS_REGION : "eu-west-3" 
+
+# Permission can be added at job level or workflow level    
+permissions:
+      id-token: write   # This is required for requesting the JWT
+      contents: read    # This is required for actions/checkout
+jobs:
+my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-oidc-issuer-url: ${{ secrets.AWS_OIDC_ISSUER_URL }}
+          aws-oidc-client-id: ${{ secrets.AWS_OIDC_CLIENT_ID }}
+
+      - name: Validate OIDC provider configuration
+        run: |
+          echo "Issuer URL: ${{ secrets.AWS_OIDC_ISSUER_URL }}"
+          echo "Client ID: ${{ secrets.AWS_OIDC_CLIENT_ID }}"
+  AssumeRoleAndCallIdentity:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          role-to-assume: arn:aws:iam::381163360185:role/boutheyna_github_actions_role #change to reflect your IAM role’s ARN
+          role-session-name: GitHub_to_AWS_via_FederatedOIDC
+          aws-region: ${{ env.AWS_REGION }}
+          # Hello from AWS: WhoAmI
+      - name: Sts GetCallerIdentity
+        run: |
+          aws sts get-caller-identity
