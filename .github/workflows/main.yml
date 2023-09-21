@@ -36,16 +36,16 @@ jobs:
       # Checkout the repository
       - name: Checkout
         uses: actions/checkout@v2
-      # Backend config 
-        backend-config: 
-            bucket        =  $(AWS_BUCKET_NAME)"
-            key           = "$(AWS_BUCKET_KEY_NAME)"
-            region        = "eu-west-3"
-
+      
       # Initialize Terraform
       - name: 'Terraform Initialize'
         uses: hashicorp/setup-terraform@v1
-
+        with:
+          backend-config: |
+            bucket        = "$(AWS_BUCKET_NAME)"
+            key           = "$(AWS_BUCKET_KEY_NAME)"
+            region        = "eu-west-3"
+          
       # Run Terraform commands
       - name: 'Terraform Plan'
         run: terraform plan
