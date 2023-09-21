@@ -28,7 +28,7 @@ resource "aws_instance" "public_instance" {
   associate_public_ip_address = true
   iam_instance_profile        = aws_iam_instance_profile.ec2_instance_profile_public.name
   vpc_security_group_ids      = [aws_security_group.public_instance_sg.id]
-  
+
   provisioner "file" {
     source      = local_file.tf-key.filename
     destination = "/home/ec2-user/remote_key.pem"
@@ -40,9 +40,9 @@ resource "aws_instance" "public_instance" {
   }
   # Need more configuration here to be able to make a connection from this instance to the private one
 
-  depends_on = [ 
+  depends_on = [
     local_file.tf-key
-   ]
+  ]
 }
 
 # Create a security group
@@ -86,8 +86,8 @@ resource "aws_instance" "private_instance" {
     Name = "private-instance"
   }
   user_data = file("install_nginx.sh")
-  
-  depends_on = [ 
+
+  depends_on = [
     local_file.tf-key
   ]
 

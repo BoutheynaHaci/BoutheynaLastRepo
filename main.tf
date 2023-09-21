@@ -1,6 +1,6 @@
 resource "aws_vpc" "my_vpc" {
-  cidr_block = "10.0.0.0/16" # Replace with your desired CIDR block
-  enable_dns_support = true
+  cidr_block           = "10.0.0.0/16" # Replace with your desired CIDR block
+  enable_dns_support   = true
   enable_dns_hostnames = true
 
   tags = {
