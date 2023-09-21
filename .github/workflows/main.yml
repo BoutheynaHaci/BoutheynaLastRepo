@@ -48,10 +48,8 @@ jobs:
             key           = "$(AWS_BUCKET_KEY_NAME)"
             region        = "eu-west-3"
           
-      # Run Terraform commands
-      - name: 'Terraform init'
-        run: terraform init 
-
+      # Run Terraform commande
+      
       - name: 'Terraform Plan'
         run: terraform plan
 
