@@ -28,3 +28,21 @@ jobs:
       - name: Sts GetCallerIdentity
         run: |
           aws sts get-caller-identity
+
+  deploy-infra:
+    steps:
+      # Initialize Terraform
+      - name: 'Terraform Initialize'
+        uses: hashicorp/setup-terraform@v1
+        with:
+          backend-config: |
+            bucket        = "$(AWS_BUCKET_NAME)"
+            key           = "$(AWS_BUCKET_KEY_NAME)"
+            region        = "eu-west-3"
+
+      # Run Terraform commands
+      - name: 'Terraform Plan'
+        run: terraform plan
+
+      - name: 'Terraform Apply'
+        run: terraform apply -auto-approve
