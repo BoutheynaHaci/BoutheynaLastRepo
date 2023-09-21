@@ -18,7 +18,7 @@ jobs:
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
         with:
-          role-to-assume: arn:aws:iam::381163360185:role/boutheyna_github_actions_role
+          role-to-assume: arn:aws:iam::381163360185:role/oidc_role_github
           role-session-name: GitHub_to_AWS_via_Boutheyna_OIDC
           aws-region: eu-west-3
       - name: Sts GetCallerIdentity
