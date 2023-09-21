@@ -31,6 +31,7 @@ jobs:
           aws sts get-caller-identity
 
   deploy-infra:
+    needs: AssumeRoleAndCallIdentity
     runs-on: ubuntu-latest
     steps:
       # Checkout the repository
@@ -50,7 +51,7 @@ jobs:
       # Run Terraform commands
       - name: 'Terraform init'
         run: terraform init 
-        
+
       - name: 'Terraform Plan'
         run: terraform plan
 
