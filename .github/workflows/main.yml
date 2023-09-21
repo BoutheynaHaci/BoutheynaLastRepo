@@ -8,6 +8,10 @@ on:
 env:
   AWS_REGION: eu-west-3
 
+permessions:
+  id-token: write
+  contents: read
+
 jobs:
   AssumeRoleAndCallIdentity:
     runs-on: ubuntu-latest
