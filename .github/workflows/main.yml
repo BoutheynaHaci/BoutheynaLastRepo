@@ -8,7 +8,7 @@ on:
 env:
   AWS_REGION: eu-west-3
 
-permessions:
+permissions:
   id-token: write
   contents: read
 
