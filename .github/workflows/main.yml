@@ -41,6 +41,7 @@ jobs:
       # Initialize Terraform
       - name: 'Terraform Initialize'
         uses: hashicorp/setup-terraform@v1
+        run: terraform init -reconfigure
         # run: terraform init
         with:
           backend-config: |
@@ -49,7 +50,7 @@ jobs:
             region        = "eu-west-3"
           
       # Run Terraform commande
-      
+
       - name: 'Terraform Plan'
         run: terraform plan
 
