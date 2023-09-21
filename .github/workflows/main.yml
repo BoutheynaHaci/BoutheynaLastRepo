@@ -40,7 +40,7 @@ jobs:
       # Initialize Terraform
       - name: 'Terraform Initialize'
         uses: hashicorp/setup-terraform@v1
-        run: terraform init
+        # run: terraform init
         with:
           backend-config: |
             bucket        = "$(AWS_BUCKET_NAME)"
