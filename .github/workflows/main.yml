@@ -29,10 +29,6 @@ jobs:
       - name: Sts GetCallerIdentity
         run: 
           aws sts get-caller-identity
-
-      # Checkout the repository
-      - name: Checkout
-        uses: actions/checkout@v2
       
       # Initialize Terraform
       - name: 'Terraform Initialize'
