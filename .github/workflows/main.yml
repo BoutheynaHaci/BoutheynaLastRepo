@@ -56,7 +56,7 @@ jobs:
           run: terraform init -reconfigure -upgrade=true
           backend-config: |
             bucket        = "boutheyna-actions"
-            key           = "Test.tfstate"
+            key           = "terraform.tfstate"
             region        = "eu-west-3"
           working-directory: ${{ env.WORKING_DIRECTORY }}
 
