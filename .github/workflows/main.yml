@@ -22,7 +22,7 @@ jobs:
     runs-on: windows-latest
     env:
       TERRAFORM_VERSION: 1.5.7
-      WORKING_DIRECTORY: ${{ github.workspace }}\BoutheynaLastRepo
+      WORKING_DIRECTORY: ${{ github.workspace }}\BoutheynaLastRepo\BoutheynaLastRepo
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
