@@ -3,8 +3,10 @@ name: Connect to an AWS role from a GitHub repository
 on:
   push:
     branches:
-      - '*'
-  
+      - '*' 
+
+  workflow_dispatch:
+
 env:
   AWS_REGION: eu-west-3
 
@@ -13,8 +15,14 @@ permissions:
   contents: read
 
 jobs:
+ #====================================================================================================================================
+  # OIDC 
+  #====================================================================================================================================
   OIDCDeployInfra:
     runs-on: ubuntu-latest
+    env:
+      TERRAFORM_VERSION: 1.5.7
+      WORKING_DIRECTORY: ./Desktop/projectGit/NewGitBouth/BoutheynaLastRepo
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
@@ -29,21 +37,47 @@ jobs:
       - name: Sts GetCallerIdentity
         run: 
           aws sts get-caller-identity
-      
-      # Initialize Terraform
-      - name: 'Terraform Initialize'
+     #==================================
+     # Setup Terraform
+     #================================== 
+      - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
-        # run: terraform init
         with:
-          backend-config: |
-            bucket        = "$(AWS_BUCKET_NAME)"
-            key           = "$(AWS_BUCKET_KEY_NAME)"
-            region        = "eu-west-3"
-          
-      # Run Terraform commande
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
 
-      - name: 'Terraform Plan'
-        run: terraform plan
-
-      - name: 'Terraform Apply'
-        run: terraform apply -auto-approve
+    #==================================
+    # Terraform Init
+    #==================================  
+    - name: 'Terraform Initialize'
+     id: init
+      uses: hashicorp/setup-terraform@v1
+        run: terraform init -reconfigure -upgrade=true
+      with:
+        backend-config: |
+          bucket        = "$(AWS_BUCKET_NAME)"
+          key           = "$(AWS_BUCKET_KEY_NAME)"
+          region        = "eu-west-3"
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+    #==================================
+    # Terraform Validate
+    #==================================        
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+    #==================================
+    # Terraform Plan
+    #================================== 
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan
+      working-directory: ${{ env.WORKING_DIRECTORY
+    #==================================
+    # Terraform Apply
+    #==================================
+    - name: Terraform Apply
+      id: apply
+      run: terraform apply -auto-approve
+      working-directory: ${{ env.WORKING_DIRECTORY }}
+       
