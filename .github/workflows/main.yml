@@ -18,7 +18,7 @@ jobs:
  #====================================================================================================================================
   # OIDC 
   #====================================================================================================================================
-  OIDCDeployInfra:
+  OidcDeployInfra:
     runs-on: ubuntu-latest
     env:
       TERRAFORM_VERSION: 1.5.7
@@ -35,8 +35,7 @@ jobs:
           aws-region: eu-west-3
 
       - name: Sts GetCallerIdentity
-        run: 
-          aws sts get-caller-identity
+        run: aws sts get-caller-identity
      #==================================
      # Setup Terraform
      #================================== 
