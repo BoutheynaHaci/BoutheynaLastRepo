@@ -9,7 +9,7 @@ terraform {
       version = ">= 3.0"
     }
   }
-  
+
   backend "s3" {
     bucket = "boutheyna-actions"
     key    = "Test.tfstate"
