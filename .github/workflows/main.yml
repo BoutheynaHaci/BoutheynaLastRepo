@@ -19,10 +19,10 @@ jobs:
   # OIDC 
   #====================================================================================================================================
   OIDCDeployInfra:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     env:
       TERRAFORM_VERSION: 1.5.7
-      WORKING_DIRECTORY: ${{ github.workspace }}
+      WORKING_DIRECTORY: ${{ github.workspace }}/Desktop/projectGit/NewGitBouth/BoutheynaLastRepo
     steps:
       - name: Git clone the repository
         uses: actions/checkout@v3
