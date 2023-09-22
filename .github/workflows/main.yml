@@ -15,11 +15,10 @@ permissions:
   contents: read
 
 jobs:
-  
   #====================================================================================================================================
   # OIDC 
   #====================================================================================================================================
-  Deployment : 
+  OIDCDeployInfra:
     runs-on: ubuntu-latest
     env:
       TERRAFORM_VERSION: 1.5.7
@@ -37,47 +36,50 @@ jobs:
 
       - name: Sts GetCallerIdentity
         run: aws sts get-caller-identity
-     #==================================
-     # Setup Terraform
-     #================================== 
+
+      #==================================
+      # Setup Terraform
+      #==================================
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: ${{ env.TERRAFORM_VERSION }}
           terraform_wrapper: false
 
-    #==================================
-    # Terraform Init
-    #==================================  
-    - name: 'Terraform Initialize'
-     id: init
-      uses: hashicorp/setup-terraform@v1
-        run: terraform init -reconfigure -upgrade=true
-      with:
-        backend-config: |
-          bucket        = "boutheyna-actions"
-          key           = "Test.tfstate"
-          region        = "eu-west-3"
+      #==================================
+      # Terraform Init
+      #==================================
+      - name: 'Terraform Initialize'
+        id: init
+        uses: hashicorp/setup-terraform@v1
+        with:
+          run: terraform init -reconfigure -upgrade=true
+          backend-config: |
+            bucket        = "boutheyna-actions"
+            key           = "Test.tfstate"
+            region        = "eu-west-3"
+          working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      #==================================
+      # Terraform Validate
+      #==================================
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate
         working-directory: ${{ env.WORKING_DIRECTORY }}
-    #==================================
-    # Terraform Validate
-    #==================================        
-    - name: Terraform Validate
-      id: validate
-      run: terraform validate
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-    #==================================
-    # Terraform Plan
-    #================================== 
-    - name: Terraform Plan
-      id: plan
-      run: terraform plan
-      working-directory: ${{ env.WORKING_DIRECTORY
-    #==================================
-    # Terraform Apply
-    #==================================
-    - name: Terraform Apply
-      id: apply
-      run: terraform apply -auto-approve
-      working-directory: ${{ env.WORKING_DIRECTORY }}
-       
+
+      #==================================
+      # Terraform Plan
+      #==================================
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
+      #==================================
+      # Terraform Apply
+      #==================================
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: ${{ env.WORKING_DIRECTORY }}
