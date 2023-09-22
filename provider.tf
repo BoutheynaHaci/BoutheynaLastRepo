@@ -9,6 +9,10 @@ terraform {
       version = ">= 3.0"
     }
   }
-
-  backend "s3" {}
+  
+  backend "s3" {
+    bucket = "boutheyna-actions"
+    key    = "Test.tfstate"
+    region = "eu-west-3"
+  }
 }
