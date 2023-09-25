@@ -20,7 +20,6 @@ jobs:
   #====================================================================================================================================
   OIDCDeployInfra:
     runs-on: windows-latest
-    environment: ${{ inputs.environment }}
     env:
       TERRAFORM_VERSION: 1.5.7
       WORKING_DIRECTORY: .
