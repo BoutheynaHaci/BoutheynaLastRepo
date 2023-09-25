@@ -49,7 +49,7 @@ jobs:
       #==================================
       # Terraform Init
       #==================================
-      - name: 'Terraform Initialize'
+      - name: Terraform Initialize
         id: init
         uses: hashicorp/setup-terraform@v1
         with:
