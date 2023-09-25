@@ -20,61 +20,62 @@ jobs:
   #====================================================================================================================================
   OIDCDeployInfra:
     runs-on: windows-latest
+    environment: ${{ inputs.environment }}
     env:
       TERRAFORM_VERSION: 1.5.7
       WORKING_DIRECTORY: .
+      TFSTATE_KEY : tarraform.tfstate
     steps:
-      - name: Git clone the repository
-        uses: actions/checkout@v3
+    - name: Git clone the repository
+      uses: actions/checkout@v3
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        role-to-assume: arn:aws:iam::381163360185:role/oidc_role_github
+        role-session-name: testAssumeRole
+        aws-region: eu-west-3
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          role-to-assume: arn:aws:iam::381163360185:role/oidc_role_github
-          role-session-name: testAssumeRole
-          aws-region: eu-west-3
-
-      - name: Sts GetCallerIdentity
-        run: aws sts get-caller-identity
+    - name: Sts GetCallerIdentity
+      run: aws sts get-caller-identity
 
       #==================================
       # Setup Terraform
       #==================================
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: ${{ env.TERRAFORM_VERSION }}
-          terraform_wrapper: false
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: ${{ env.TERRAFORM_VERSION }}
+        terraform_wrapper: false
 
       #==================================
       # Terraform Init
       #==================================
-      - name: Terraform Initialize
-        id: init
-        uses: hashicorp/setup-terraform@v1
-        with:
-          run: terraform init -reconfigure -upgrade=true
-          backend-config: |
-            bucket        = "boutheyna-actions"
-            key           = "terraform.tfstate"
-            region        = "eu-west-3"
+    - name: Terraform Initialize
+      id: init
+      uses: hashicorp/setup-terraform@v1
+      with:
+        run: terraform init -reconfigure -upgrade=true
+        backend-config: |
+          bucket        = "boutheyna-actions"
+          key           = "terraform.tfstate"
+          region        = "eu-west-3"
           working-directory: ${{ env.WORKING_DIRECTORY }}
 
       #==================================
       # Terraform Validate
       #==================================
-      - name: Terraform Validate
-        id: validate
-        run: terraform validate
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate
+      working-directory: ${{ env.WORKING_DIRECTORY }}
 
       #==================================
       # Terraform Plan
       #==================================
-      - name: Terraform Plan
-        id: plan
-        run: terraform plan
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+    - name: Terraform Plan
+      id: plan
+      run: terraform plan
+      working-directory: ${{ env.WORKING_DIRECTORY }}
 
       #==================================
       # Terraform Apply
