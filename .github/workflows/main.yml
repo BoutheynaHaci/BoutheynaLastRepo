@@ -82,4 +82,4 @@ jobs:
     - name: Terraform Apply
       id: apply
       run: terraform apply -auto-approve
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+      working-directory: ${{ env.WORKING_DIRECTORY }}
