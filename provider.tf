@@ -13,6 +13,7 @@ terraform {
   backend "s3" {
     bucket = "boutheyna-actions"
     key    = "Test.tfstate"
+    encrypt = true
     region = "eu-west-3"
   }
 }
