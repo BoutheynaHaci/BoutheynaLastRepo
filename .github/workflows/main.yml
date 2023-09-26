@@ -36,8 +36,8 @@ jobs:
         role-session-name: testAssumeRole
         aws-region: eu-west-3
 
-    - name: Sts GetCallerIdentity
-      run: aws sts get-caller-identity
+    # - name: Sts GetCallerIdentity
+    #   run: aws sts get-caller-identity
 
       #==================================
       # Setup Terraform
@@ -53,14 +53,12 @@ jobs:
       #==================================
     - name: Terraform Initialize
       id: init
-      uses: hashicorp/setup-terraform@v1
-      with:
-        run: |
-          terraform init -reconfigure -upgrade=true 
-           -backend-config="key=${{ env.TFSTATE_KEY }}" 
-           -backend-config="region=${{ env.AWS_REGION }}" 
-           -backend-config="bucket=boutheyna-actions"
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+      run: |
+        terraform init -reconfigure -upgrade=true 
+         -backend-config="key=${{ env.TFSTATE_KEY }}" 
+         -backend-config="region=${{ env.AWS_REGION }}" 
+         -backend-config="bucket=boutheyna-actions"
+      working-directory: ${{ env.WORKING_DIRECTORY }}
       #==================================
       # Terraform Validate
       #==================================
